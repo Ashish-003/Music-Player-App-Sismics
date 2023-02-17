@@ -81,7 +81,7 @@ public class UserResource extends BaseResource {
         user.setUsername(username);
         user.setPassword(password);
         user.setEmail(email);
-        user.setCreateDate(new Date());
+        user.dates.setCreateDate(new Date());
 
         if (localeId == null) {
             // Set the locale from the HTTP headers
@@ -430,7 +430,7 @@ public class UserResource extends BaseResource {
             // Check if admin has the default password
             UserDao userDao = new UserDao();
             User adminUser = userDao.getActiveById("admin");
-            if (adminUser != null && adminUser.getDeleteDate() == null) {
+            if (adminUser != null && adminUser.dates.getDeleteDate() == null) {
                 response.add("is_default_password", Constants.DEFAULT_ADMIN_PASSWORD.equals(adminUser.getPassword()));
             }
         } else {
