@@ -75,17 +75,10 @@ public class Track {
      */
     private String format;
 
-    /**
-     * Creation date.
-     */
-    private Date createDate;
-    
-    /**
-     * Deletion date.
-     */
-    private Date deleteDate;
+    public DateCommon dates;
 
     public Track() {
+        this.dates = new DateCommon();
     }
 
     public Track(String id, String albumId, String artistId, String fileName, String title, String titleCorrected, Integer year, String genre, Integer length, Integer bitrate, Integer order, boolean vbr, String format, Date createDate, Date deleteDate) {
@@ -102,8 +95,9 @@ public class Track {
         this.order = order;
         this.vbr = vbr;
         this.format = format;
-        this.createDate = createDate;
-        this.deleteDate = deleteDate;
+        this.dates = new DateCommon(createDate,deleteDate);
+        // this.createDate = createDate;
+        // this.deleteDate = deleteDate;
     }
 
     /**
@@ -320,41 +314,6 @@ public class Track {
         this.format = format;
     }
 
-    /**
-     * Getter of createDate.
-     *
-     * @return createDate
-     */
-    public Date getCreateDate() {
-        return createDate;
-    }
-
-    /**
-     * Setter of createDate.
-     *
-     * @param createDate createDate
-     */
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
-
-    /**
-     * Getter of deleteDate.
-     *
-     * @return deleteDate
-     */
-    public Date getDeleteDate() {
-        return deleteDate;
-    }
-
-    /**
-     * Setter of deleteDate.
-     *
-     * @param deleteDate deleteDate
-     */
-    public void setDeleteDate(Date deleteDate) {
-        this.deleteDate = deleteDate;
-    }
 
     /**
      * Getter of titleCorrected.

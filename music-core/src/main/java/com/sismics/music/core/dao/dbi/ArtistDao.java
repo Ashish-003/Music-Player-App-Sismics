@@ -154,7 +154,7 @@ public class ArtistDao extends BaseDao<ArtistDto, ArtistCriteria> {
      *
      * @param resultList Query results as a table
      * @return Query results as a list of domain objects
-     */
+     
     private List<ArtistDto> assembleResultList(List<Object[]> resultList) {
         List<ArtistDto> artistDtoList = new ArrayList<>();
         for (Object[] o : resultList) {
@@ -166,4 +166,5 @@ public class ArtistDao extends BaseDao<ArtistDto, ArtistCriteria> {
         }
         return artistDtoList;
     }
+    */
 }

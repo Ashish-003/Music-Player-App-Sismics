@@ -101,7 +101,7 @@ public class TrackDao extends BaseDao<TrackDto, TrackCriteria> {
      */
     public String create(Track track) {
         track.setId(UUID.randomUUID().toString());
-        track.setCreateDate(new Date());
+        track.dates.setCreateDate(new Date());
 
         final Handle handle = ThreadLocalContext.get().getHandle();
         handle.createStatement("insert into " +
@@ -120,7 +120,7 @@ public class TrackDao extends BaseDao<TrackDto, TrackCriteria> {
                 .bind("number", track.getOrder())
                 .bind("vbr", track.isVbr())
                 .bind("format", track.getFormat())
-                .bind("createDate", new Timestamp(track.getCreateDate().getTime()))
+                .bind("createDate", new Timestamp(track.dates.getCreateDate().getTime()))
                 .execute();
 
         return track.getId();
@@ -162,7 +162,7 @@ public class TrackDao extends BaseDao<TrackDto, TrackCriteria> {
                 .bind("number", track.getOrder())
                 .bind("vbr", track.isVbr())
                 .bind("format", track.getFormat())
-                .bind("createDate", new Timestamp(track.getCreateDate().getTime()))
+                .bind("createDate", new Timestamp(track.dates.getCreateDate().getTime()))
                 .execute();
 
         return track;

@@ -63,15 +63,12 @@ public class User {
     /**
      * Creation date.
      */
-    private Date createDate;
-    
-    /**
-     * Deletion date.
-     */
-    private Date deleteDate;
+    public DateCommon dates;
 
     public User() {
+        this.dates = new DateCommon();
     }
+
 
     public User(String id, String localeId, String roleId, String username, String password, String email, Integer maxBitrate, String lastFmSessionToken, boolean lastFmActive, boolean firstConnection, Date createDate, Date deleteDate) {
         this.id = id;
@@ -84,8 +81,9 @@ public class User {
         this.lastFmSessionToken = lastFmSessionToken;
         this.lastFmActive = lastFmActive;
         this.firstConnection = firstConnection;
-        this.createDate = createDate;
-        this.deleteDate = deleteDate;
+        // this.createDate = createDate;
+        // this.deleteDate = deleteDate;
+        this.dates = new DateCommon(createDate, deleteDate);
     }
 
     /**
@@ -268,41 +266,6 @@ public class User {
         this.firstConnection = firstConnection;
     }
 
-    /**
-     * Getter of createDate.
-     *
-     * @return createDate
-     */
-    public Date getCreateDate() {
-        return createDate;
-    }
-
-    /**
-     * Setter of createDate.
-     *
-     * @param createDate createDate
-     */
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
-
-    /**
-     * Getter of deleteDate.
-     *
-     * @return deleteDate
-     */
-    public Date getDeleteDate() {
-        return deleteDate;
-    }
-
-    /**
-     * Setter of deleteDate.
-     *
-     * @param deleteDate deleteDate
-     */
-    public void setDeleteDate(Date deleteDate) {
-        this.deleteDate = deleteDate;
-    }
 
     @Override
     public String toString() {

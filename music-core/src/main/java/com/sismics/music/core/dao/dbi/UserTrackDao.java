@@ -24,7 +24,7 @@ public class UserTrackDao {
     public String create(UserTrack userTrack) {
         // Init user / track data
         userTrack.setId(UUID.randomUUID().toString());
-        userTrack.setCreateDate(new Date());
+        userTrack.dates.setCreateDate(new Date());
         userTrack.setPlayCount(0);
 
         // Create user / track
@@ -35,7 +35,7 @@ public class UserTrackDao {
                 .bind("id", userTrack.getId())
                 .bind("userId", userTrack.getUserId())
                 .bind("trackId", userTrack.getTrackId())
-                .bind("createDate", new Timestamp(userTrack.getCreateDate().getTime()))
+                .bind("createDate", new Timestamp(userTrack.dates.getCreateDate().getTime()))
                 .execute();
 
         return userTrack.getId();

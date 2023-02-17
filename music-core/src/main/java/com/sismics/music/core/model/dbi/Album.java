@@ -41,17 +41,18 @@ public class Album {
     /**
      * Creation date.
      */
-    private Date createDate;
+    public DateCommonUpdate dates;
+    // private Date createDate;
     
     /**
      * Last update date.
      */
-    private Date updateDate;
+    // private Date updateDate;
     
     /**
      * Deletion date.
      */
-    private Date deleteDate;
+    // private Date deleteDate;
     
     /**
      * Location.
@@ -59,9 +60,11 @@ public class Album {
     private String location;
 
     public Album() {
+        this.dates = new DateCommonUpdate();
     }
 
     public Album(String id) {
+        this.dates = new DateCommonUpdate();
         this.id = id;
     }
 
@@ -71,9 +74,10 @@ public class Album {
         this.artistId = artistId;
         this.name = name;
         this.albumArt = albumArt;
-        this.createDate = createDate;
-        this.updateDate = updateDate;
-        this.deleteDate = deleteDate;
+        this.dates = new DateCommonUpdate(createDate,deleteDate,updateDate);
+        // this.createDate = createDate;
+        // this.updateDate = updateDate;
+        // this.deleteDate = deleteDate;
         this.location = location;
     }
 
@@ -181,60 +185,6 @@ public class Album {
      */
     public void setAlbumArt(String albumArt) {
         this.albumArt = albumArt;
-    }
-
-    /**
-     * Getter of createDate.
-     *
-     * @return createDate
-     */
-    public Date getCreateDate() {
-        return createDate;
-    }
-
-    /**
-     * Setter of createDate.
-     *
-     * @param createDate createDate
-     */
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
-
-    /**
-     * Getter of updateDate.
-     *
-     * @return updateDate
-     */
-    public Date getUpdateDate() {
-        return updateDate;
-    }
-
-    /**
-     * Setter of updateDate.
-     *
-     * @param updateDate updateDate
-     */
-    public void setUpdateDate(Date updateDate) {
-        this.updateDate = updateDate;
-    }
-
-    /**
-     * Getter of deleteDate.
-     *
-     * @return deleteDate
-     */
-    public Date getDeleteDate() {
-        return deleteDate;
-    }
-
-    /**
-     * Setter of deleteDate.
-     *
-     * @param deleteDate deleteDate
-     */
-    public void setDeleteDate(Date deleteDate) {
-        this.deleteDate = deleteDate;
     }
     
     /**

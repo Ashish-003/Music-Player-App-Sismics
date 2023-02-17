@@ -23,7 +23,7 @@ public class UserAlbumDao {
     public String create(UserAlbum userAlbum) {
         // Init user / album data
         userAlbum.setId(UUID.randomUUID().toString());
-        userAlbum.setCreateDate(new Date());
+        userAlbum.dates.setCreateDate(new Date());
         userAlbum.setScore(0);
 
         // Create user / album
@@ -34,7 +34,7 @@ public class UserAlbumDao {
                 .bind("id", userAlbum.getId())
                 .bind("userId", userAlbum.getUserId())
                 .bind("albumId", userAlbum.getAlbumId())
-                .bind("createDate", new Timestamp(userAlbum.getCreateDate().getTime()))
+                .bind("createDate", new Timestamp(userAlbum.dates.getCreateDate().getTime()))
                 .execute();
 
         return userAlbum.getId();

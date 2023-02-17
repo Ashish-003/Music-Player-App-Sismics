@@ -69,7 +69,7 @@ public class UserDao extends BaseDao<UserDto, UserCriteria> {
         // Init user data
         user.setId(UUID.randomUUID().toString());
         user.setPassword(hashPassword(user.getPassword()));
-        user.setCreateDate(new Date());
+        user.dates.setCreateDate(new Date());
 
         // Checks for user unicity
         if (getActiveByUsername(user.getUsername()) != null) {
@@ -88,7 +88,7 @@ public class UserDao extends BaseDao<UserDto, UserCriteria> {
                 .bind("password", user.getPassword())
                 .bind("email", user.getEmail())
                 .bind("firstConnection", user.isFirstConnection())
-                .bind("createDate", new Timestamp(user.getCreateDate().getTime()))
+                .bind("createDate", new Timestamp(user.dates.getCreateDate().getTime()))
                 .execute();
 
         return user.getId();

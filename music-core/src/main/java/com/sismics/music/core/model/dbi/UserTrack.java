@@ -38,14 +38,10 @@ public class UserTrack {
     /**
      * Creation date.
      */
-    private Date createDate;
-
-    /**
-     * Deletion date.
-     */
-    private Date deleteDate;
+    public DateCommon dates;
 
     public UserTrack() {
+        this.dates = new DateCommon();
     }
 
     public UserTrack(String id, String userId, String trackId, Integer playCount, Boolean like, Date createDate, Date deleteDate) {
@@ -54,8 +50,9 @@ public class UserTrack {
         this.trackId = trackId;
         this.playCount = playCount;
         this.like = like;
-        this.createDate = createDate;
-        this.deleteDate = deleteDate;
+        this.dates = new DateCommon(createDate,deleteDate);
+        // this.createDate = createDate;
+        // this.deleteDate = deleteDate;
     }
 
     /**
@@ -146,42 +143,6 @@ public class UserTrack {
      */
     public void setLike(boolean like) {
         this.like = like;
-    }
-
-    /**
-     * Getter of createDate.
-     *
-     * @return createDate
-     */
-    public Date getCreateDate() {
-        return createDate;
-    }
-
-    /**
-     * Setter of createDate.
-     *
-     * @param createDate createDate
-     */
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
-
-    /**
-     * Getter of deleteDate.
-     *
-     * @return deleteDate
-     */
-    public Date getDeleteDate() {
-        return deleteDate;
-    }
-
-    /**
-     * Setter of deleteDate.
-     *
-     * @param deleteDate deleteDate
-     */
-    public void setDeleteDate(Date deleteDate) {
-        this.deleteDate = deleteDate;
     }
 
     @Override

@@ -15,50 +15,33 @@ public class SQLSplitter implements Iterable<CharSequence> {
      */
     static int consumeQuote(final CharSequence s, final int start) {
         if (start >= s.length()) return start;
-        char ender;
+        char ender = getQuoteEnder(s, start);
+        return findQuoteEnd(s, start, ender);
+    }
+
+    private static char getQuoteEnder(final CharSequence s, final int start) {
         switch (s.charAt(start)) {
             case '\'':
-                ender = '\'';
-                break;
+                return '\'';
             case '"':
-                ender = '"';
-                break;
+                return '"';
             case '[':
-                ender = ']';
-                break;
-
+                return ']';
             case '`':
-                ender = '`';
-                break;
-            case '$': {
-                int quoteEnd = start + 1;
-                for (; s.charAt(quoteEnd) != '$'; ++quoteEnd)
-                    if (quoteEnd >= s.length())
-                        return quoteEnd;
-                int i = quoteEnd + 1;
-                while (i < s.length()) {
-                    if (s.charAt(i) == '$') {
-                        boolean match = true;
-                        for (int j = start; j <= quoteEnd && i < s.length(); ++j, ++i) {
-                            if (s.charAt(i) != s.charAt(j)) {
-                                match = false;
-                                break;
-                            }
-                        }
-                        if (match)
-                            return i;
-                    } else
-                        ++i;
-                }
-                return i;
-            }
-
+                return '`';
+            case '$':
+                return '$';
             default:
-                return start;
+                return '\0';
+        }
+    }
+
+    private static int findQuoteEnd(final CharSequence s, final int start, final char ender) {
+        if (ender == '$') {
+            return findDollarQuoteEnd(s, start);
         }
 
         boolean escaped = false;
-
         for (int i = start + 1; i < s.length(); ++i) {
             if (escaped) {
                 escaped = false;
@@ -72,6 +55,95 @@ public class SQLSplitter implements Iterable<CharSequence> {
         }
         return s.length();
     }
+
+    private static int findDollarQuoteEnd(final CharSequence s, final int start) {
+        int quoteEnd = start + 1;
+        for (; s.charAt(quoteEnd) != '$'; ++quoteEnd)
+            if (quoteEnd >= s.length())
+                return quoteEnd;
+
+        int i = quoteEnd + 1;
+        while (i < s.length()) {
+            if (s.charAt(i) == '$') {
+                boolean match = isDollarQuoteMatch(s, start, quoteEnd, i);
+                if (match) {
+                    return i + 1;
+                }
+            } else {
+                ++i;
+            }
+        }
+        return i;
+    }
+
+    private static boolean isDollarQuoteMatch(final CharSequence s, final int start, final int quoteEnd, int i) {
+        for (int j = start; j <= quoteEnd && i < s.length(); ++j, ++i) {
+            if (s.charAt(i) != s.charAt(j)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // static int consumeQuote(final CharSequence s, final int start) {
+    //     if (start >= s.length()) return start;
+    //     char ender;
+    //     switch (s.charAt(start)) {
+    //         case '\'':
+    //             ender = '\'';
+    //             break;
+    //         case '"':
+    //             ender = '"';
+    //             break;
+    //         case '[':
+    //             ender = ']';
+    //             break;
+
+    //         case '`':
+    //             ender = '`';
+    //             break;
+    //         case '$': {
+    //             int quoteEnd = start + 1;
+    //             for (; s.charAt(quoteEnd) != '$'; ++quoteEnd)
+    //                 if (quoteEnd >= s.length())
+    //                     return quoteEnd;
+    //             int i = quoteEnd + 1;
+    //             while (i < s.length()) {
+    //                 if (s.charAt(i) == '$') {
+    //                     boolean match = true;
+    //                     for (int j = start; j <= quoteEnd && i < s.length(); ++j, ++i) {
+    //                         if (s.charAt(i) != s.charAt(j)) {
+    //                             match = false;
+    //                             break;
+    //                         }
+    //                     }
+    //                     if (match)
+    //                         return i;
+    //                 } else
+    //                     ++i;
+    //             }
+    //             return i;
+    //         }
+
+    //         default:
+    //             return start;
+    //     }
+
+    //     boolean escaped = false;
+
+    //     for (int i = start + 1; i < s.length(); ++i) {
+    //         if (escaped) {
+    //             escaped = false;
+    //             continue;
+    //         }
+    //         char c = s.charAt(i);
+    //         if (c == '\\')
+    //             escaped = true;
+    //         else if (c == ender)
+    //             return i + 1;
+    //     }
+    //     return s.length();
+    // }
 
     private static boolean isNewLine(char c) {
         return c == '\n' || c == '\r';

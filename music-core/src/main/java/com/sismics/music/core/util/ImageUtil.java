@@ -16,6 +16,10 @@ import java.io.InputStream;
 import java.util.Iterator;
 import java.util.List;
 
+import java.util.HashMap;
+import java.util.Map;
+
+
 /**
  * Utility class to manage image files.
  *
@@ -38,7 +42,15 @@ public class ImageUtil {
     // Related to alpha channel removal
     private static final int[] RGB_MASKS = {0xFF0000, 0xFF00, 0xFF};
     private static final ColorModel RGB_OPAQUE = new DirectColorModel(32, RGB_MASKS[0], RGB_MASKS[1], RGB_MASKS[2]);
-    
+    private static final Map<String, FileType> HEADER_FILE_TYPE_MAP = new HashMap<>();
+
+    static {
+        HEADER_FILE_TYPE_MAP.put("GIF87a", FileType.GIF);
+        HEADER_FILE_TYPE_MAP.put("GIF89a", FileType.GIF);
+        HEADER_FILE_TYPE_MAP.put("\u00FF\u00D8", FileType.JPG);
+        HEADER_FILE_TYPE_MAP.put("\u0089PNG\r\n\u001a\n", FileType.PNG);
+        HEADER_FILE_TYPE_MAP.put("BM", FileType.BMP);
+    }
     /**
      * Detects the image format from its contents.
      * 
@@ -57,18 +69,10 @@ public class ImageUtil {
             }
             String header = new String(headerBytes, "US-ASCII");
             
-            if (header.startsWith("GIF87a") || header.startsWith("GIF89a")) {
-                return FileType.GIF;
-            }
-            if (headerBytes[0] == ((byte) 0xff) && headerBytes[1] == ((byte) 0xd8)) {
-                return FileType.JPG;
-            }
-            if (headerBytes[0] == ((byte) 0x89) && headerBytes[1] == ((byte) 0x50) && headerBytes[2] == ((byte) 0x4e) && headerBytes[3] == ((byte) 0x47) &&
-                    headerBytes[4] == ((byte) 0x0d) && headerBytes[5] == ((byte) 0x0a) && headerBytes[6] == ((byte) 0x1a) && headerBytes[7] == ((byte) 0x0a)) {
-                return FileType.PNG;
-            }
-            if (headerBytes[0] == ((byte) 0x42) && headerBytes[1] == ((byte) 0x4d)) {
-                return FileType.BMP;
+            for (Map.Entry<String, FileType> entry : HEADER_FILE_TYPE_MAP.entrySet()) {
+                if (header.startsWith(entry.getKey())) {
+                    return entry.getValue();
+                }
             }
         } finally {
             if (is != null) {

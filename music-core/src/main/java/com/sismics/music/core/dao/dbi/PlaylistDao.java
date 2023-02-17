@@ -129,7 +129,7 @@ public class PlaylistDao extends BaseDao<PlaylistDto, PlaylistCriteria> {
      *
      * @param resultList Query results as a table
      * @return Query results as a list of domain objects
-     */
+     
     private List<PlaylistDto> assembleResultList(List<Object[]> resultList) {
         List<PlaylistDto> playlistDtoList = new ArrayList<>();
         for (Object[] o : resultList) {
@@ -142,4 +142,5 @@ public class PlaylistDao extends BaseDao<PlaylistDto, PlaylistCriteria> {
         }
         return playlistDtoList;
     }
+    */
 }

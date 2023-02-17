@@ -33,14 +33,11 @@ public class UserAlbum {
     /**
      * Creation date.
      */
-    private Date createDate;
-
-    /**
-     * Deletion date.
-     */
-    private Date deleteDate;
+    public DateCommon dates;
+    
 
     public UserAlbum() {
+        this.dates = new DateCommon();
     }
 
     public UserAlbum(String id, String userId, String albumId, Integer score, Date createDate, Date deleteDate) {
@@ -48,8 +45,9 @@ public class UserAlbum {
         this.userId = userId;
         this.albumId = albumId;
         this.score = score;
-        this.createDate = createDate;
-        this.deleteDate = deleteDate;
+        this.dates = new DateCommon(createDate,deleteDate);
+        // this.createDate = createDate;
+        // this.deleteDate = deleteDate;
     }
 
     /**
@@ -124,41 +122,6 @@ public class UserAlbum {
         this.score = score;
     }
 
-    /**
-     * Getter of createDate.
-     *
-     * @return createDate
-     */
-    public Date getCreateDate() {
-        return createDate;
-    }
-
-    /**
-     * Setter of createDate.
-     *
-     * @param createDate createDate
-     */
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
-
-    /**
-     * Getter of deleteDate.
-     *
-     * @return deleteDate
-     */
-    public Date getDeleteDate() {
-        return deleteDate;
-    }
-
-    /**
-     * Setter of deleteDate.
-     *
-     * @param deleteDate deleteDate
-     */
-    public void setDeleteDate(Date deleteDate) {
-        this.deleteDate = deleteDate;
-    }
 
     @Override
     public String toString() {

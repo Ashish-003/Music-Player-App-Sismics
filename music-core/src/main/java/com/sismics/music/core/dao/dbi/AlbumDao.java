@@ -72,11 +72,11 @@ public class AlbumDao extends BaseDao<AlbumDto, AlbumCriteria> {
     public String create(Album album) {
         album.setId(UUID.randomUUID().toString());
         final Date now = new Date();
-        if (album.getCreateDate() == null) {
-            album.setCreateDate(now);
+        if (album.dates.getCreateDate() == null) {
+            album.dates.setCreateDate(now);
         }
-        if (album.getUpdateDate() == null) {
-            album.setUpdateDate(now);
+        if (album.dates.getUpdateDate() == null) {
+            album.dates.setUpdateDate(now);
         }
 
         Handle handle = ThreadLocalContext.get().getHandle();
@@ -88,8 +88,8 @@ public class AlbumDao extends BaseDao<AlbumDto, AlbumCriteria> {
                 .bind("artistId", album.getArtistId())
                 .bind("name", album.getName())
                 .bind("albumArt", album.getAlbumArt())
-                .bind("updateDate", new Timestamp(album.getUpdateDate().getTime()))
-                .bind("createDate", new Timestamp(album.getCreateDate().getTime()))
+                .bind("updateDate", new Timestamp(album.dates.getUpdateDate().getTime()))
+                .bind("createDate", new Timestamp(album.dates.getCreateDate().getTime()))
                 .bind("location", album.getLocation())
                 .execute();
 
@@ -117,7 +117,7 @@ public class AlbumDao extends BaseDao<AlbumDto, AlbumCriteria> {
                 .bind("directoryId", album.getDirectoryId())
                 .bind("artistId", album.getArtistId())
                 .bind("albumArt", album.getAlbumArt())
-                .bind("updateDate", new Timestamp(album.getUpdateDate().getTime()))
+                .bind("updateDate", new Timestamp(album.dates.getUpdateDate().getTime()))
                 .bind("location", album.getLocation())
                 .execute();
 
@@ -136,7 +136,7 @@ public class AlbumDao extends BaseDao<AlbumDto, AlbumCriteria> {
                 " a.updatedate = :updateDate " +
                 " where a.id = :id and a.deletedate is null")
                 .bind("id", album.getId())
-                .bind("updateDate", new Timestamp(album.getUpdateDate().getTime()))
+                .bind("updateDate", new Timestamp(album.dates.getUpdateDate().getTime()))
                 .execute();
 
         return album;

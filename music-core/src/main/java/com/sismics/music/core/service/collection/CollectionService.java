@@ -268,8 +268,8 @@ public class CollectionService extends AbstractScheduledService {
                 AppContext.getInstance().getAlbumArtService().importAlbumArt(album, albumArtFile, false);
             }
             Date updateDate = getDirectoryUpdateDate(parentPath);
-            album.setCreateDate(updateDate);
-            album.setUpdateDate(updateDate);
+            album.dates.setCreateDate(updateDate);
+            album.dates.setUpdateDate(updateDate);
             albumDao.create(album);
         }
         track.setAlbumId(album.getId());

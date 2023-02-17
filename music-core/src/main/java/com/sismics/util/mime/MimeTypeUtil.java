@@ -11,11 +11,62 @@ import java.io.InputStream;
  */
 public class MimeTypeUtil {
     /**
+     * check for isZip
+     * @param header
+     * @return boolean
+     */
+    private static boolean isZip(String header) {
+        return header.startsWith("PK");
+    }
+    /**
+     * check for isGif
+     * @param header
+     * @return boolean
+     */
+    private static boolean isGif(String header) {
+        return header.startsWith("GIF87a") || header.startsWith("GIF89a");
+    }
+    /**
+     * check for isJpeg
+     * @param headerBytes
+     * @return boolean
+     */
+    private static boolean isJpeg(byte[] headerBytes) {
+        return headerBytes[0] == ((byte) 0xff) && headerBytes[1] == ((byte) 0xd8);
+    }
+    /**
+     * check for isPng
+     * @param headerBytes
+     * @return boolean
+     */
+    private static final byte[] PNG_HEADER = {(byte) 0x89, (byte) 0x50, (byte) 0x4e, (byte) 0x47, (byte) 0x0d, (byte) 0x0a, (byte) 0x1a, (byte) 0x0a};
+
+    private static boolean isPng(byte[] headerBytes) {
+        if (headerBytes.length != PNG_HEADER.length) {
+            return false;
+        }
+        for (int i = 0; i < headerBytes.length; i++) {
+            if (headerBytes[i] != PNG_HEADER[i]) {
+                return false;
+            }
+        }
+        return true;
+    }
+    /**
+     * check for isIco
+     * @param headerBytes
+     * @return boolean
+     */
+    private static boolean isIco(byte[] headerBytes) {
+        return headerBytes[0] == ((byte) 0x00) && headerBytes[1] == ((byte) 0x00) && headerBytes[2] == ((byte) 0x01) && headerBytes[3] == ((byte) 0x00);
+    }
+    /**
      * Try to guess the MIME type of a file by its magic number (header).
      * 
      * @param file File to inspect
      * @return MIME type
      */
+
     public static String guessMimeType(File file) throws Exception {
         InputStream is = null;
         try {
@@ -26,18 +77,21 @@ public class MimeTypeUtil {
                 throw new Exception("Cannot read input file");
             }
             String header = new String(headerBytes, "US-ASCII");
-            
-            if (header.startsWith("PK")) {
+
+            if (isZip(header)) {
                 return MimeType.APPLICATION_ZIP;
-            } else if (header.startsWith("GIF87a") || header.startsWith("GIF89a")) {
+            }
+            if (isGif(header)) {
                 return MimeType.IMAGE_GIF;
-            } else if (headerBytes[0] == ((byte) 0xff) && headerBytes[1] == ((byte) 0xd8)) {
+            }
+            if (isJpeg(headerBytes)) {
                 return MimeType.IMAGE_JPEG;
-            } else if (headerBytes[0] == ((byte) 0x89) && headerBytes[1] == ((byte) 0x50) && headerBytes[2] == ((byte) 0x4e) && headerBytes[3] == ((byte) 0x47) &&
-                    headerBytes[4] == ((byte) 0x0d) && headerBytes[5] == ((byte) 0x0a) && headerBytes[6] == ((byte) 0x1a) && headerBytes[7] == ((byte) 0x0a)) {
-                return MimeType.IMAGE_PNG;
-            } else if (headerBytes[0] == ((byte) 0x00) && headerBytes[1] == ((byte) 0x00) && headerBytes[2] == ((byte) 0x01) && headerBytes[3] == ((byte) 0x00)) {
+            }
+            if (isIco(headerBytes)) {
                 return MimeType.IMAGE_X_ICON;
+            }
+            if (isPng(headerBytes)) {
+                return MimeType.IMAGE_PNG;
             }
         } finally {
             if (is != null) {
