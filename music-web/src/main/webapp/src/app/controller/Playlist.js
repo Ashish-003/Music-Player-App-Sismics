@@ -11,6 +11,7 @@ angular
       $scope,
       $state,
       $stateParams,
+      $http,
       Restangular,
       Playlist,
       NamedPlaylist
@@ -21,6 +22,54 @@ angular
         .then(function (data) {
           $scope.playlist = data;
         });
+
+      // get reccomendations from lastFM
+      $scope.recommendLastFM = function (playlist) {
+        var trackLength = playlist.tracks.length;
+        var lastTrack = playlist.tracks[trackLength - 1];
+        $http
+          .get("https://ws.audioscrobbler.com/2.0/", {
+            params: {
+              method: "track.getsimilar",
+              api_key: "7119a7b5c4455bbe8196934e22358a27",
+              track: lastTrack.title,
+              autocorrect: 1,
+              artist: lastTrack.artist.name,
+              format: "json",
+              limit: 10,
+            },
+          })
+          .then(function (response) {
+            $scope.results = {
+              lastFmTracks: response.data.similartracks.track,
+            };
+          });
+      };
+
+      // get reccomendations from Spotify
+
+      $scope.recommendSpotify = function (playlist) {
+        var trackLength = playlist.tracks.length;
+        var lastTrack = playlist.tracks[trackLength - 1];
+        $http
+          .get("https://ws.audioscrobbler.com/2.0/", {
+            params: {
+              method: "track.getsimilar",
+              api_key: "7119a7b5c4455bbe8196934e22358a27",
+              track: lastTrack.title,
+              autocorrect: 1,
+              artist: lastTrack.artist.name,
+              format: "json",
+              limit: 20,
+            },
+          })
+          .then(function (response) {
+            var tracks = response.data.similartracks.track;
+            $scope.results = {
+              spotifyTracks: tracks.slice(-10),
+            };
+          });
+      };
 
       // Play a single track
       $scope.playTrack = function (track) {
@@ -99,6 +148,31 @@ angular
               ui.item.index()
             );
           });
+
+          // Configuration for track sorting
+          $scope.trackSortableOptions = {
+            forceHelperSize: true,
+            forcePlaceholderSize: true,
+            tolerance: "pointer",
+            handle: ".handle",
+            containment: "parent",
+            helper: function (e, ui) {
+              ui.children().each(function () {
+                $(this).width($(this).width());
+              });
+              return ui;
+            },
+            stop: function (e, ui) {
+              // Send new positions to server
+              $scope.$apply(function () {
+                NamedPlaylist.moveTrack(
+                  $scope.playlist,
+                  ui.item.attr("data-order"),
+                  ui.item.index()
+                );
+              });
+            },
+          };
         },
       };
     }
