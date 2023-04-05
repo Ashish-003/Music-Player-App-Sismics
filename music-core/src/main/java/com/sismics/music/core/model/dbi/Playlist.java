@@ -27,6 +27,8 @@ public class Playlist {
      */
     private String name;
 
+    private int ispublic;
+
     public Playlist() {
     }
 
@@ -70,6 +72,10 @@ public class Playlist {
         return name;
     }
 
+    public int getAccess() {
+        return ispublic;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -100,6 +106,15 @@ public class Playlist {
      */
     public static void updatePlaylist(Playlist playlist) {
         new PlaylistDao().update(playlist);
+    }
+
+    /**
+     * Update access of playlist.
+     *
+     * @param playlist The playlist to update
+     */
+    public static void updatePlaylistAccess(Playlist playlist) {
+        new PlaylistDao().updateAccess(playlist);
     }
 
     /**

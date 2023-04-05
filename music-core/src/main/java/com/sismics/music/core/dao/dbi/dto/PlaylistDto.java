@@ -31,12 +31,22 @@ public class PlaylistDto {
      */
     private Long userTrackPlayCount;
 
+    private int ispublic;
+
     public String getId() {
         return id;
     }
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public void setAccess(int num) {
+        this.ispublic = num;
+    }
+
+    public void getAccess(int num) {
+        return ispublic;
     }
 
     public String getName() {

@@ -68,11 +68,12 @@ public class PlaylistDao extends BaseDao<PlaylistDto, PlaylistCriteria> {
     public String create(Playlist playlist) {
         final Handle handle = ThreadLocalContext.get().getHandle();
         handle.createStatement("insert into " +
-                "  t_playlist(id, user_id, name)" +
-                "  values(:id, :userId, :name)")
+                "  t_playlist(id, user_id, name, ispublic)" +
+                "  values(:id, :userId, :name,:ispublic)")
                 .bind("id", playlist.getId())
                 .bind("userId", playlist.getUserId())
                 .bind("name", playlist.getName())
+                .bind("ispublic",playlist.getAccess())
                 .execute();
 
         return playlist.getId();
@@ -89,6 +90,21 @@ public class PlaylistDao extends BaseDao<PlaylistDto, PlaylistCriteria> {
                 "  set name = :name" +
                 "  where id = :id")
                 .bind("name", playlist.getName())
+                .bind("id", playlist.getId())
+                .execute();
+    }
+
+    /**
+     * Update access of playlist.
+     *
+     * @param playlist Playlist to update
+     */
+    public void updateAccess(Playlist playlist) {
+        final Handle handle = ThreadLocalContext.get().getHandle();
+        handle.createStatement("update t_playlist" +
+                "  set ispublic = :ispublic" +
+                "  where id = :id")
+                .bind("ispublic", 1-playlist.getAccess())
                 .bind("id", playlist.getId())
                 .execute();
     }

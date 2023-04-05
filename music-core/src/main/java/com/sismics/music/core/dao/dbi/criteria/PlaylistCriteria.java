@@ -26,6 +26,8 @@ public class PlaylistCriteria {
      */
     private String userId;
 
+    private int ispublic;
+
     public String getId() {
         return this.id;
     }

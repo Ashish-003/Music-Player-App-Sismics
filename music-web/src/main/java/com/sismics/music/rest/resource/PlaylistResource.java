@@ -44,7 +44,8 @@ public class PlaylistResource extends BaseResource {
      */
     @PUT
     public Response createPlaylist(
-            @FormParam("name") String name) {
+            @FormParam("name") String name,
+            @FormParam("isPublic") Integer isPublic) {
         if (!authenticate()) {
             throw new ForbiddenClientException();
         }
@@ -55,6 +56,7 @@ public class PlaylistResource extends BaseResource {
         Playlist playlist = new Playlist();
         playlist.setUserId(principal.getId());
         playlist.setName(name);
+        playlist.setAccess(isPublic);
         Playlist.createPlaylist(playlist);
 
         // Output the playlist
@@ -64,6 +66,7 @@ public class PlaylistResource extends BaseResource {
                         .add("name", playlist.getName())
                         .add("trackCount", 0)
                         .add("userTrackPlayCount", 0)
+                        .add("isPublic",playlist.getAccess())
                         .build()));
     }
 
@@ -77,7 +80,8 @@ public class PlaylistResource extends BaseResource {
     @Path("{id: [a-z0-9\\-]+}")
     public Response updatePlaylist(
             @PathParam("id") String playlistId,
-            @FormParam("name") String name) {
+            @FormParam("name") String name,
+            @FormParam("isPublic") Integer isPublic) {
         if (!authenticate()) {
             throw new ForbiddenClientException();
         }
@@ -95,6 +99,7 @@ public class PlaylistResource extends BaseResource {
         // Update the playlist
         Playlist playlist = new Playlist(playlistDto.getId());
         playlist.setName(name);
+        playlist.setAccess(isPublic);
         Playlist.updatePlaylist(playlist);
 
         // Output the playlist
